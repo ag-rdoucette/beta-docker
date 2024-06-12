@@ -1,0 +1,31 @@
+version: "3.4"
+
+services:
+  connect-api:
+    environment:
+      - OP_TLS_DOMAIN=ENTER.DNS.RECORD
+      - OP_TLS_CERT_FILE=/home/opuser/.op/tls.crt
+      - OP_TLS_KEY_FILE=/home/opuser/.op/tls.key
+    secrets:
+      - source: op-tls-crt
+        target: /home/opuser/.op/tls.crt
+        uid: "999"
+        gid: "999"
+        mode: 0440
+      - source: op-tls-key
+        target: /home/opuser/.op/tls.key
+        uid: "999"
+        gid: "999"
+        mode: 0440
+    networks:
+      - op-connect
+
+secrets:
+  op-tls-crt:
+    external: true
+  op-tls-key:
+    external: true
+
+networks:
+  op-connect:
+    internal: false

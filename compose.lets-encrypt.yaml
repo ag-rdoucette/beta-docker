@@ -1,0 +1,12 @@
+version: "3.4"
+
+services:
+  connect-api:
+    environment:
+      - OP_TLS_USE_LETSENCRYPT=yes
+      - OP_TLS_DOMAIN=ENTER.DNS.RECORD
+    ports:
+      - "443:8443"
+networks:
+  op-connect:
+    internal: false
