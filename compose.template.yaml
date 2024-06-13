@@ -14,7 +14,7 @@ services:
   sync:
     image: 1password/connect-sync
     secrets:
-      - source: 1password-credentials.json
+      - source: credentials
         target: /home/opuser/.op/1password-credentials.json
         uid: "999"
         gid: "999"
