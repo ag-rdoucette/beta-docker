@@ -1,58 +1,32 @@
-version: "3.4"
-
 services:
-  connect-api:
-    image: 1password/connect-api:latest
+  api:
+    image: 1password/connect-api
     secrets:
-      - source: 1password-credentials.json
+      - source: credentials
         target: /home/opuser/.op/1password-credentials.json
         uid: "999"
         gid: "999"
         mode: 0400
-    volumes:
-      - data:/home/opuser/.op/data
-    env_file:
-      - connect-api.env
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: any
-      labels:
-        service_name: "connect-api"
-    ports:
-      - 443:8443
-    networks:
-      - op-connect
-
-  connect-sync:
-    image: 1password/connect-sync:latest
+    volumes: [data:/home/opuser/.op/data]
+    env_file: connect-api.env
+    networks: [op-connect]
+    user: 999:999
+  sync:
+    image: 1password/connect-sync
     secrets:
-      - source: 1password-credentials.json
+      - source: credentials
         target: /home/opuser/.op/1password-credentials.json
         uid: "999"
         gid: "999"
         mode: 0400
-    volumes:
-      - data:/home/opuser/.op/data
-    env_file:
-      - connect-sync.env
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: any
-      labels:
-        service_name: "connect-sync"
-    networks:
-      - op-connect
-
+    volumes: [data:/home/opuser/.op/data]
+    env_file: connect-sync.env
+    networks: [op-connect]
+    user: 999:999
 volumes:
   data:
-
 secrets:
-  1password-credentials.json:
-    external: true
-
+  credentials:
+    file: 1password-credentials.json
 networks:
   op-connect:
-    driver: overlay
-    internal: true
